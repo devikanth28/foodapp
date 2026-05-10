@@ -12,14 +12,33 @@ const Review     = require('./Review');
 User.hasMany(Order,    { foreignKey: 'userId' });
 Order.belongsTo(User,  { foreignKey: 'userId' });
 
-Restaurant.hasMany(Order,       { foreignKey: 'restaurantId' });
-Order.belongsTo(Restaurant,     { foreignKey: 'restaurantId' });
+Restaurant.hasMany(Order, {
+  foreignKey: 'restaurantId',
+});
 
-Restaurant.hasMany(MenuItem,    { foreignKey: 'restaurantId' });
-MenuItem.belongsTo(Restaurant,  { foreignKey: 'restaurantId' });
+Order.belongsTo(Restaurant, {
+  foreignKey: 'restaurantId',
+  as: 'restaurant',
+});
 
-Order.hasMany(OrderItem,        { foreignKey: 'orderId' });
-OrderItem.belongsTo(Order,      { foreignKey: 'orderId' });
+Restaurant.hasMany(MenuItem, {
+  foreignKey: 'restaurantId',
+  as: 'menuItems'
+});
+
+MenuItem.belongsTo(Restaurant, {
+  foreignKey: 'restaurantId',
+  as: 'restaurant'
+});
+
+Order.hasMany(OrderItem, {
+  foreignKey: 'orderId',
+  as: 'items',
+});
+
+OrderItem.belongsTo(Order, {
+  foreignKey: 'orderId',
+});
 
 MenuItem.hasMany(OrderItem,     { foreignKey: 'menuItemId' });
 OrderItem.belongsTo(MenuItem,   { foreignKey: 'menuItemId' });

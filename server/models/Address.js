@@ -7,9 +7,23 @@ const Address = sequelize.define('Address', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  addressLine: {
+
+  user_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
+
+  address_line: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+
+  city: {
+    type: DataTypes.STRING,
+  },
+
+  pincode: {
+    type: DataTypes.STRING,
   },
 }, {
   tableName: 'addresses',

@@ -1,13 +1,13 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { userAPI } from '@/api/index';
+import { userAPI } from '@/api';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // true on first load
+  const [user, setUser]         = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // On app start: check if there's a saved token and load user
+  // On app start — if token exists in localStorage, load the user
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
@@ -20,25 +20,23 @@ export const AuthProvider = ({ children }) => {
   const loadUser = async () => {
     try {
       const { data } = await userAPI.getProfile();
-      setUser(data.data);
+      setUser(data.user);
     } catch {
-      // Token invalid or expired — clear it
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const login = (userData, accessToken, refreshToken) => {
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
+  // Called after successful login/register
+  // Backend returns a single token — we store it as accessToken
+  const login = (userData, token) => {
+    localStorage.setItem('accessToken', token);
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
     setUser(null);
   };
 
@@ -53,7 +51,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook — use this everywhere instead of useContext(AuthContext)
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used inside AuthProvider');

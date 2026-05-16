@@ -3,20 +3,28 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '@/context/AuthContext';
 import ProtectedRoute from '@/components/common/ProtectedRoute';
+import LoginPage from './pages/auth/LoginPage';
+import HomePage from './pages/home/HomePage';
+import RestaurantPage from './pages/restaurant/RestaurantPage';
+import CartPage from './pages/cart/CartPage';
+import OrdersPage from './pages/orders/OrdersPage';
+import OrderDetailPage from './pages/orders/OrderDetailPage';
+import ProfilePage from './pages/profile/ProfilePage';
 
-// Pages — will be created in Days 2-5
-// Temporary placeholder components until real pages are built
-const Placeholder = ({ name }) => (
-  <div className="min-h-screen flex items-center justify-center text-gray-500 text-xl">
-    {name} — coming soon (Day 2+)
-  </div>
-);
+// Pages
+// import LoginPage        from '@/pages/auth/LoginPage';
+// import HomePage         from '@/pages/home/HomePage';
+// import RestaurantPage   from '@/pages/restaurant/RestaurantPage';
+// import CartPage         from '@/pages/cart/CartPage';
+// import OrderPage       from '@/pages/orders/OrdersPage';
+// import OrderDetailPage  from '@/pages/orders/OrderDetailPage';
+// import ProfilePage      from '@/pages/profile/ProfilePage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 5 * 60 * 1000,
       refetchOnWindowFocus: false,
     },
   },
@@ -28,45 +36,40 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            {/* Public routes */}
-            <Route path="/login"    element={<Placeholder name="Login / OTP" />} />
+            {/* Public */}
+            <Route path="/login"    element={<LoginPage />} />
             <Route path="/register" element={<Navigate to="/login" replace />} />
 
-            {/* Protected routes */}
+            {/* Protected */}
             <Route path="/" element={
-              <ProtectedRoute><Placeholder name="Home" /></ProtectedRoute>
+              <ProtectedRoute><HomePage /></ProtectedRoute>
             } />
             <Route path="/restaurant/:id" element={
-              <ProtectedRoute><Placeholder name="Restaurant Detail" /></ProtectedRoute>
+              <ProtectedRoute><RestaurantPage /></ProtectedRoute>
             } />
             <Route path="/cart" element={
-              <ProtectedRoute><Placeholder name="Cart" /></ProtectedRoute>
+              <ProtectedRoute><CartPage /></ProtectedRoute>
             } />
             <Route path="/orders" element={
-              <ProtectedRoute><Placeholder name="Order History" /></ProtectedRoute>
+              <ProtectedRoute><OrdersPage /></ProtectedRoute>
             } />
             <Route path="/orders/:id" element={
-              <ProtectedRoute><Placeholder name="Order Detail / Tracking" /></ProtectedRoute>
+              <ProtectedRoute><OrderDetailPage /></ProtectedRoute>
             } />
             <Route path="/profile" element={
-              <ProtectedRoute><Placeholder name="My Profile" /></ProtectedRoute>
-            } />
-            <Route path="/profile/addresses" element={
-              <ProtectedRoute><Placeholder name="Saved Addresses" /></ProtectedRoute>
+              <ProtectedRoute><ProfilePage /></ProtectedRoute>
             } />
 
-            {/* 404 */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
 
-        {/* Global toast notifications */}
         <Toaster
           position="top-center"
           toastOptions={{
             duration: 3000,
             style: { fontSize: '14px' },
-            success: { iconTheme: { primary: '#16a34a', secondary: '#fff' } },
+            success: { iconTheme: { primary: '#f97316', secondary: '#fff' } },
             error:   { iconTheme: { primary: '#dc2626', secondary: '#fff' } },
           }}
         />
